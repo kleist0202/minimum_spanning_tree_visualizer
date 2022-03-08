@@ -32,3 +32,5 @@
 *.app
 
 build/
+data/outputs/
+data/inputs/
