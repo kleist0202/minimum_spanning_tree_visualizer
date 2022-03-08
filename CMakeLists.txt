@@ -4,10 +4,14 @@ set(CMAKE_BUILD_TYPE Debug)
 
 project(minimum_spanning_tree)
 
+set(EXECUTABLE_OUTPUT_PATH "${CMAKE_SOURCE_DIR}/bin")
+
 find_package(SDL2 REQUIRED)
 find_package(Boost 1.40 COMPONENTS program_options REQUIRED)
 
-add_executable(${PROJECT_NAME} window.cpp main.cpp classes.cpp kruskal.cpp prim.cpp helperFunctions.cpp) # here, add files to compile
+file(GLOB SOURCE_FILES src/*.cpp)
+
+add_executable(${PROJECT_NAME} ${SOURCE_FILES}) # here, add files to compile
 
 INCLUDE_DIRECTORIES( ${Boost_INCLUDE_DIR} )
 
