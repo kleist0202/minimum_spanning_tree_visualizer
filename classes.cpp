@@ -38,6 +38,10 @@ bool Node::operator<(const Node& other) {
     return id < other.id;
 }
 
+void Node::clearNeighbours() {
+    neighbours.clear();
+}
+
 std::ostream& operator<<(std::ostream &output, const Node& obj ) {
     output << "id: " << obj.id << " neighbours: ";
     if (obj.neighbours.empty())

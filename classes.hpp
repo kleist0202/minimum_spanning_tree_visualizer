@@ -28,6 +28,8 @@ public:
 
     bool operator <(const Node& other);
 
+    void clearNeighbours(); 
+
     friend std::ostream &operator<<(std::ostream &output, const Node& obj);
 };
 

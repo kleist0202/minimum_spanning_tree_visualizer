@@ -8,9 +8,16 @@
 #include <functional>
 #include <chrono>
 #include <thread>
+#include <vector>
 #include <ctime>
+#include "program.hpp"
 
 namespace FastGui {
+
+struct Vetctor2d {
+    int x;
+    int y;
+};
 
 class Window {
 public:
@@ -30,8 +37,7 @@ public:
     time_t startTime;
 
     // input variables
-    int mouse_x;
-    int mouse_y;
+    Vetctor2d mouse_pos;
     bool leftButtonPressed;
 
     // fps variables
@@ -49,6 +55,7 @@ public:
     SDL_Renderer* getRenderer();
     int getFps() const;
     time_t getStartTime() const;
+    Vetctor2d getMousePos() const;
 
     void setScreenColor(Uint8 r, Uint8 g, Uint8 b);
     void setWindowTitle(const char* title);
@@ -62,66 +69,11 @@ public:
     void setDelay(int d);
     void calcFps();
     bool isLeftButtonPressed();
+    bool keyPressed(SDL_Keycode key);
 
-    template<class Function, class... Args> 
-    void main_loop(Function&& f, Args&&... args) {
-        if (isResizable)
-            flags |= SDL_WINDOW_RESIZABLE;
-        if (isFullscreen)
-            flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
-
-        SDL_CreateWindowAndRenderer(width, height, flags, &window, &renderer);
-        SDL_SetWindowTitle(window, windowTitle);
-
-        auto func = std::bind(f, std::ref(args)...);
-
-        Uint8 buttons;
-
-        while(isWorking) {
-            while (SDL_PollEvent(&event) > 0)
-            {
-                SDL_PumpEvents();
-
-                if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE) {
-                    windowShouldClose();
-                }
-
-
-                buttons = SDL_GetMouseState(&mouse_x, &mouse_y);
-                if ((buttons & SDL_BUTTON_LMASK) != 0) {
-                    leftButtonPressed = true;
-                }
-                else {
-                    leftButtonPressed = false;
-                }
-
-                switch (event.type) {
-                    case SDL_WINDOWEVENT:
-                        if (event.window.event == SDL_WINDOWEVENT_RESIZED) {
-                            SDL_GetWindowSize(window , &width , &height);
-                        }
-                        break;
-
-                    case SDL_QUIT:
-                        windowShouldClose();
-                        break;
-                    default:
-                        break;
-                }
-            }
-
-            calcFps();
-            SDL_SetRenderDrawColor(renderer, screenColor.r, screenColor.g, screenColor.b, 255);
-            SDL_RenderClear(renderer);
-            SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-            func();
-
-            // sleep
-            SDL_Delay(delay);
-
-            SDL_RenderPresent(renderer);
-        }
-    }
+    //template<class Function, class... Args> 
+    //void main_loop(Function&& f, Args&&... args) {
+    void main_loop(Program& program);
 };
 
 void drawCircle(SDL_Renderer* renderer, const SDL_Color& color, int x, int y, int r);

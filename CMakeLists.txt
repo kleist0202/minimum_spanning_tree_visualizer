@@ -7,7 +7,7 @@ project(minimum_spanning_tree)
 find_package(SDL2 REQUIRED)
 find_package(Boost 1.40 COMPONENTS program_options REQUIRED)
 
-add_executable(${PROJECT_NAME} window.cpp main.cpp classes.cpp) # here, add files to compile
+add_executable(${PROJECT_NAME} window.cpp main.cpp classes.cpp kruskal.cpp prim.cpp helperFunctions.cpp) # here, add files to compile
 
 INCLUDE_DIRECTORIES( ${Boost_INCLUDE_DIR} )
 
